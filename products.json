@@ -61,5 +61,32 @@
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
     "code": "K7",
     "stock": 9
+  }, 
+  {
+    "id": 8,
+    "title": "Euphoria",
+    "description": "Progressive",
+    "price": 10,
+    "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
+    "code": "ET1",
+    "stock": 15
+  },
+  {
+    "id": 9,
+    "title": "Aurora",
+    "description": "Deep House",
+    "price": 12,
+    "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
+    "code": "ADH2",
+    "stock": 20
+  },
+  {
+    "id": 10,
+    "title": "Into the Abyss",
+    "description": "Techno",
+    "price": 15,
+    "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
+    "code": "ITA3",
+    "stock": 25
   }
 ]
