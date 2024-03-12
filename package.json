@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backEnd class",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MelinaPe/backendCourse.git"
+  },
+  "keywords": [
+    "music"
+  ],
+  "author": "melina victoria entin rodriguez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MelinaPe/backendCourse/issues"
+  },
+  "homepage": "https://github.com/MelinaPe/backendCourse#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
