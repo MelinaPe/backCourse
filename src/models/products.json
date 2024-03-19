@@ -2,91 +2,111 @@
   {
     "id": 1,
     "title": "Overwhelmed",
-    "description": "Techno",
+    "description": "Released by Drumcode Records",
     "price": 4,
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
     "code": "E1",
-    "stock": 5
+    "stock": 5,
+    "status": true,
+    "category": "Techno"
   },
   {
     "id": 2,
     "title": "Voltage Drop",
-    "description": "Melodic Techno",
+    "description": "Released by Anjunadeep",
     "price": 6,
     "thumbnail": "https://img.freepik.com/foto-gratis/cerca-grabacion-video-telefono-inteligente-concierto-imagen-entonada_1153-6815.jpg?t=st=1709139568~exp=1709143168~hmac=ee745f9d03f24f437965afb357afbc133c3d2333763e9652240fd97e6c2eeef4&w=900",
     "code": "F2",
-    "stock": 20
+    "stock": 4,
+    "status": true,
+    "category": "Melodic Techno"
   },
   {
     "id": 3,
     "title": "Pulsar",
-    "description": "Progressive House",
+    "description": "Released by Spirit Music",
     "price": 5,
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
     "code": "G3",
-    "stock": 15
+    "stock": 15,
+    "status": true,
+    "category": "Progressive House"
   },
   {
     "id": 4,
     "title": "Galaxy Cruiser",
-    "description": "Synthwave",
+    "description": "Released by Monstercat",
     "price": 7,
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
     "code": "H4",
-    "stock": 10
+    "stock": 10,
+    "status": true,
+    "category": "Synthwave"
   },
   {
     "id": 5,
     "title": "Neon Nights",
-    "description": "Tech House",
+    "description": "Released by Dirtybird Records",
     "price": 6,
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
     "code": "I5",
-    "stock": 8
+    "stock": 8,
+    "status": true,
+    "category": "Tech House"
   },
   {
     "id": 6,
     "title": "Solar Flare",
-    "description": "Trance",
+    "description": "Released by Anjunabeats",
     "price": 8,
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
     "code": "J6",
-    "stock": 12
+    "stock": 12,
+    "status": true,
+    "category": "Trance"
   },
   {
     "id": 7,
     "title": "Dreams",
-    "description": "Cyberpunk",
+    "description": "Released by Mau5trap",
     "price": 7,
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
     "code": "K7",
-    "stock": 9
-  }, 
+    "stock": 9,
+    "status": true,
+    "category": "Cyberpunk"
+  },
   {
     "id": 8,
     "title": "Euphoria",
-    "description": "Progressive",
+    "description": "Released by Enhanced Music",
     "price": 10,
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
     "code": "ET1",
-    "stock": 15
+    "stock": 15,
+    "status": true,
+    "category": "Progressive"
   },
   {
     "id": 9,
     "title": "Aurora",
-    "description": "Deep House",
+    "description": "Released by Defected Records",
     "price": 12,
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
     "code": "ADH2",
-    "stock": 20
+    "stock": 20,
+    "status": true,
+    "category": "Deep House"
   },
   {
     "id": 10,
-    "title": "Into the Abyss",
-    "description": "Techno",
-    "price": 15,
+    "title": "Dark Matter",
+    "description": "Released by Spinnin' Records",
+    "price": 9,
     "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
-    "code": "ITA3",
-    "stock": 25
+    "code": "DM3",
+    "stock": 18,
+    "status": true,
+    "category": "Electro House"
   }
 ]
