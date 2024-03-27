@@ -8,9 +8,9 @@ class ProductManager {
         this.path = "./src/models/products.json";
     }
 
-    async addProduct(title, description, price, thumbnail, code, stock, category) {
+    async addProduct(product) {
+        const { title, description, price, thumbnail, code, stock, category, status } = product;
 
-        const status = true; 
 
         if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
             console.log("All fields are required");

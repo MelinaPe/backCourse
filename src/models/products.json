@@ -86,27 +86,5 @@
     "stock": 15,
     "status": true,
     "category": "Progressive"
-  },
-  {
-    "id": 9,
-    "title": "Aurora",
-    "description": "Released by Defected Records",
-    "price": 12,
-    "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
-    "code": "ADH2",
-    "stock": 20,
-    "status": true,
-    "category": "Deep House"
-  },
-  {
-    "id": 10,
-    "title": "Dark Matter",
-    "description": "Released by Spinnin' Records",
-    "price": 9,
-    "thumbnail": "https://img.freepik.com/fotos-premium/manos-multitud-discoteca_23-2147717087.jpg?w=2000",
-    "code": "DM3",
-    "stock": 18,
-    "status": true,
-    "category": "Electro House"
   }
 ]

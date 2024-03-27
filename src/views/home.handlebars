@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last Releases</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card p {
+            margin: 5px 0;
+        }
+
+        .card p:first-child {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .card p:last-child {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Latest Releases</h1>
+        <div class="cards">
+            {{#each products}}
+                <div class="card">
+                    <p>{{this.title}}</p>
+                    <p>{{this.description}}</p>
+                    <p>Price: €{{this.price}}</p>
+                    <p>Stock: {{this.stock}}</p>
+                    <p>Category: {{this.category}}</p>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</body>
+</html>

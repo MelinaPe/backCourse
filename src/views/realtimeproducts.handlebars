@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="productsContainer"></div>
+    <form id="addProductForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required>
+        
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" min="0" step="0.01" required>
+        
+        <label for="thumbnail">Thumbnail:</label>
+        <input type="text" id="thumbnail" name="thumbnail" required>
+
+        <label for="code">Code:</label>
+        <input type="text" id="code" name="code" required>
+        
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" min="0" required>
+        
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required>
+
+        <label for="status">Status:</label>
+        <select id="status" name="status" required>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+        </select>
+
+        <input type="submit" id="btnSend" value="Send">
+    </form>
+</body>
+</html>
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+<script src="js/main.js"></script>
