@@ -1,119 +1,59 @@
-const fs = require("fs");
-const fsPromises = require("fs").promises;
-
-
+const ProductModel = require("../models/products")
 
 class ProductManager {
-    constructor() {
-        this.path = "./src/models/products.json";
-    }
-
     async addProduct(product) {
-        const { title, description, price, thumbnail, code, stock, category, status } = product;
-
-
-        if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
-            console.log("All fields are required");
-            return;
-        }
-
         try {
-            const data = await fs.promises.readFile(this.path, "utf-8");
-            const existingProducts = JSON.parse(data);
-
-            const existingProduct = existingProducts.find(product => product.code === code);
-            if (existingProduct) {
-                console.log("The code already exists.");
-                return;
-            }
-
-            const productId = existingProducts.length > 0 ? Math.max(...existingProducts.map(product => product.id)) + 1 : 1;
-
-            const newProduct = { id: productId, title, description, price, thumbnail, code, stock, status, category };
-
-            existingProducts.push(newProduct);
-
-            await fs.promises.writeFile(this.path, JSON.stringify(existingProducts, null, 2));
+            const newProduct = new ProductModel(product);
+            await newProduct.save();
             console.log("Product added successfully");
+            return newProduct;
         } catch (error) {
             console.error("Error adding product", error);
+            throw error;
         }
     }
 
-    getProducts = async () => {
+    async getProducts() {
         try {
-            const readFile = await fs.promises.readFile("./src/models/products.json", "utf-8");
-            const productsArray = JSON.parse(readFile); 
-            return productsArray; 
+            return await ProductModel.find();
         } catch (error) {
-            console.error("Error reading the file:", error);
-            throw error; 
+            console.error("Error getting products", error);
+            throw error;
         }
     }
 
-    getProductById = async(id) => {
+    async getProductById(id) {
         try {
-            const readFile = await fs.promises.readFile("./src/models/products.json", "utf-8");
-            const productsArray = JSON.parse(readFile);
-            const product = productsArray.find(product => product.id === parseInt(id));
-            if (!product) {
-                console.log("Product not found.");
-            } else {
-                console.log(product);
-                return product; 
-            }
+            return await ProductModel.findById(id);
         } catch (error) {
-            console.error("Error reading the file:", error);
+            console.error("Error getting product by ID", error);
+            throw error;
         }
-    }  
+    }
 
-    updateProduct = async (id, updatedFields) => {
+    async updateProduct(id, updatedFields) {
         try {
-            const data = await fsPromises.readFile(this.path, 'utf-8');
-            const productsArray = JSON.parse(data);
-            const productIndex = productsArray.findIndex(product => product.id === parseInt(id));
-    
-            if (productIndex === -1) {
-                console.log("Product not found");
-                return;
-            }
-    
-            Object.keys(updatedFields).forEach(key => {
-                if (key !== 'id') {
-                    productsArray[productIndex][key] = updatedFields[key];
-                }
-            });
-    
-            await fsPromises.writeFile(this.path, JSON.stringify(productsArray, null, 2));
-    
+            const updatedProduct = await ProductModel.findByIdAndUpdate(id, updatedFields, { new: true });
             console.log("Product updated successfully");
+            return updatedProduct;
         } catch (error) {
-            console.error("Error updating product:", error);
+            console.error("Error updating product", error);
+            throw error;
         }
     }
 
-    deleteProduct = async (id) => {
+    async deleteProduct(id) {
         try {
-            const data = await fsPromises.readFile(this.path, 'utf-8');
-            const productsArray = JSON.parse(data);
-            
-            const productIndex = productsArray.findIndex(product => product.id === parseInt(id));
-    
-            if (productIndex === -1) {
-                console.log("Product not found");
-                return;
-            }
-    
-            productsArray.splice(productIndex, 1);
-
-            await fsPromises.writeFile(this.path, JSON.stringify(productsArray, null, 2));
-    
+            const deletedProduct = await ProductModel.findByIdAndDelete(id);
             console.log("Product removed successfully");
+            return deletedProduct;
         } catch (error) {
-            console.error("Error deleting product:", error);
+            console.error("Error deleting product", error);
+            throw error;
         }
     }
-}  
-
+}
 
 module.exports = ProductManager;
+
+
