@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ProductModel = require('./products'); 
 
 const cartSchema = new mongoose.Schema({
     cartId: {
@@ -8,7 +9,7 @@ const cartSchema = new mongoose.Schema({
     },
     products: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product' 
+        ref: 'products' 
     }],
     createdAt: {
         type: Date,

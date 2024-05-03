@@ -14,7 +14,11 @@ const productSchema = new mongoose.Schema({
     }, 
     stock: Number,
     status: Boolean, 
-    category: String 
+    category: String,
+    quantity: {
+        type: Number,
+        default: 1  // Establece el valor predeterminado de la cantidad como 1
+    }
 });
 
 productSchema.plugin(mongoosePaginate);

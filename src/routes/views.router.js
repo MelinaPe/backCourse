@@ -13,9 +13,9 @@ router.get("/", async (req, res) => {
 }); 
 
 
-router.get("/realtimeproducts", async (req, res) => {
+router.get("/products", async (req, res) => {
     try {
-        res.render("realtimeproducts"); 
+        res.render("products"); 
     } catch(error) {
         res.status(500).json({error: "Server internal error"})
     }

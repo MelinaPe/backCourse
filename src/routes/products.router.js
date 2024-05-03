@@ -2,20 +2,9 @@ const express = require('express');
 const router = express.Router();
 const ProductManager = require('../controllers/productManager.js');
 const ProductModel = require('../models/products');
+const path = require('path'); 
 
 const productManager = new ProductManager();
-
-// THIS IS WORKING OKI 
-// GET all products
-// router.get("/", async (req, res) => {
-//     try {
-//         const products = await productManager.getProducts();
-//         res.json(products);
-//     } catch (error) {
-//         console.error("Error getting products:", error);
-//         res.status(500).json({ error: "Server internal error" });
-//     }
-// });
 
 
 // GET all products

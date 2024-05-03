@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+<body>
+    <h1>Cart</h1>
+    <div class="cart-container">
+
+    <ul>
+        {{#each cartData.products}}
+        <li>{{this.title}} - {{this.price}}</li>
+        {{/each}}
+    </ul>
+    </div>
+    
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
