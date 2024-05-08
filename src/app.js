@@ -7,11 +7,37 @@ const productsRouter = require("./routes/products.router.js");
 const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
 const connectDB = require("./dataBase.js");
+const session = require('express-session'); 
+const cookieParser = require('cookie-parser'); 
+const MongoStore = require('connect-mongo'); 
+const usersRouter = require("./routes/user.router.js"); 
+const sessionsRouter = require("./routes/sessions.router.js"); 
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("src/public"));
+
+
+app.use(session({
+    secret: "secretLog", 
+    resave: true, 
+    saveUninitialized: true, 
+
+    // MongoStorage
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://entinfotografia:dejatedejoder1@cluster0.z5ighoj.mongodb.net/merliDataBase?retryWrites=true&w=majority&appName=Cluster0", ttl:100
+    })
+}))
+
+
+// Middleware authentication 
+function auth(req, res, next) {
+    if (req.session.user === "" && req.session.admin === true) {
+        return next(); 
+    }
+    return res.status(403).res.send("Authentication error. ");
+}
 
 // Express-Handlebars
 app.engine("handlebars", exphbs.engine());
@@ -31,9 +57,17 @@ app.get("/api/checkdbconnection", (req, res) => {
 
 
 // Routes
+app.get("/", (req, res) => {
+    res.redirect("/login"); 
+});
+
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
+app.use("/api/users", usersRouter); 
+app.use("/api/sessions", sessionsRouter); 
 app.use("/", viewsRouter);
+app.use(cookieParser()); 
+
 
 const httpServer = app.listen(port, () => {
     console.log(`App in port: http://localhost:${port}`);
@@ -41,6 +75,7 @@ const httpServer = app.listen(port, () => {
 
 const io = socket(httpServer);
 const ProductManager = require("./controllers/productManager.js");
+
 
 io.on("connection", async (socket) => {
     const productManager = new ProductManager();

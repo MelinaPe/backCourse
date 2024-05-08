@@ -17,7 +17,7 @@ const productSchema = new mongoose.Schema({
     category: String,
     quantity: {
         type: Number,
-        default: 1  // Establece el valor predeterminado de la cantidad como 1
+        default: 1  
     }
 });
 
