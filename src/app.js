@@ -12,6 +12,8 @@ const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo'); 
 const usersRouter = require("./routes/user.router.js"); 
 const sessionsRouter = require("./routes/sessions.router.js"); 
+const passport = require("passport"); 
+const initializePassport = require("./config/passport.config.js"); 
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -29,6 +31,14 @@ app.use(session({
         mongoUrl: "mongodb+srv://entinfotografia:dejatedejoder1@cluster0.z5ighoj.mongodb.net/merliDataBase?retryWrites=true&w=majority&appName=Cluster0", ttl:100
     })
 }))
+
+
+// PASSPORT IMPLEMENTATION: 
+app.use(passport.initialize()); 
+app.use(passport.session()); 
+initializePassport(); 
+
+
 
 
 // Middleware authentication 
