@@ -3,7 +3,7 @@ const exphbs = require('express-handlebars');
 const socket = require("socket.io");
 const app = express();
 const port = 8080;
-const productsRouter = require("./routes/products.router.js");
+const productsRouter = require("./routes/product.router.js");
 const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
 const connectDB = require("./dataBase.js");
@@ -14,12 +14,13 @@ const usersRouter = require("./routes/user.router.js");
 const sessionsRouter = require("./routes/sessions.router.js"); 
 const passport = require("passport"); 
 const initializePassport = require("./config/passport.config.js"); 
+// Import jsonwektoken, saved for later, I'm not using it right now.
+const jsonwebtoken = require("jsonwebtoken"); 
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("src/public"));
-
 
 app.use(session({
     secret: "secretLog", 
@@ -32,13 +33,10 @@ app.use(session({
     })
 }))
 
-
 // PASSPORT IMPLEMENTATION: 
 app.use(passport.initialize()); 
 app.use(passport.session()); 
 initializePassport(); 
-
-
 
 
 // Middleware authentication 
@@ -102,7 +100,6 @@ io.on("connection", async (socket) => {
         socket.emit("products", await productManager.getProducts());
     });
 }); 
-
 
 
 
