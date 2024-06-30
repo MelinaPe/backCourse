@@ -14,8 +14,12 @@ const usersRouter = require("./routes/user.router.js");
 const sessionsRouter = require("./routes/sessions.router.js"); 
 const passport = require("passport"); 
 const initializePassport = require("./config/passport.config.js"); 
+const authorize = require("./middlewares/authorization.js"); 
+const CartManager = require("./controllers/cartManager.js"); 
+const ProductManager = require("./controllers/productManager.js"); 
 // Import jsonwektoken, saved for later, I'm not using it right now.
 const jsonwebtoken = require("jsonwebtoken"); 
+const errorHandler = require('./middlewares/errorHandler.js');
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -63,7 +67,6 @@ app.get("/api/checkdbconnection", (req, res) => {
     }
 });
 
-
 // Routes
 app.get("/", (req, res) => {
     res.redirect("/login"); 
@@ -76,18 +79,44 @@ app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouter);
 app.use(cookieParser()); 
 
+// Error handling middleware
+app.use(errorHandler); 
+
+// Authorization middleware
+// app.use("/api/products", authorize(['admin'])); 
+// app.use("/api/carts/:cartId/addProduct/:productId", authorize(['user'])); 
+
 
 const httpServer = app.listen(port, () => {
     console.log(`App in port: http://localhost:${port}`);
 });
 
-const io = socket(httpServer);
-const ProductManager = require("./controllers/productManager.js");
+// const io = socket(httpServer);
+// const ProductManager = require("./controllers/productManager.js");
 
+
+// io.on("connection", async (socket) => {
+//     const productManager = new ProductManager();
+
+//     socket.emit("products", await productManager.getProducts());
+
+//     socket.on("removeProduct", async (id) => {
+//         await productManager.deleteProduct(id);
+//         socket.emit("products", await productManager.getProducts());
+//     });
+
+//     socket.on("addProduct", async (product) => {
+//         await productManager.addProduct(product);
+//         socket.emit("products", await productManager.getProducts());
+//     });
+
+
+
+const io = socket(httpServer);
+const productManager = new ProductManager();
+const cartManager = new CartManager();
 
 io.on("connection", async (socket) => {
-    const productManager = new ProductManager();
-
     socket.emit("products", await productManager.getProducts());
 
     socket.on("removeProduct", async (id) => {
@@ -98,6 +127,11 @@ io.on("connection", async (socket) => {
     socket.on("addProduct", async (product) => {
         await productManager.addProduct(product);
         socket.emit("products", await productManager.getProducts());
+    });
+
+    socket.on("addToCart", async ({ cartId, productId }) => {
+        await cartManager.addProductToCart(cartId, productId);
+        socket.emit("cartUpdated", await cartManager.getCartById(cartId));
     });
 }); 
 

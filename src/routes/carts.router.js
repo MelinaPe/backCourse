@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const Cart = require("../models/cart"); 
+const Cart = require("../models/cart.js"); 
 const { v4: uuidv4 } = require('uuid');
-const ProductModel = require("../models/products"); 
+const ProductModel = require("../models/products.js"); 
 const mongoose = require('mongoose');
-
+const authorize = require("../middlewares/authorization.js"); 
+const Ticket = require("../models/ticket.js"); 
+const CartManager = require("../controllers/cartManager.js"); 
+const cartManager = new CartManager(); 
+const TicketService = require("../services/ticketService.js"); 
+const ticketService = new TicketService(); 
 
 // Post cart 
 router.post("/", async (req, res) => {
@@ -33,7 +38,7 @@ router.get("/", async (req, res) => {
 });
 
 // Add product to cart 
-router.post("/:cartId/addProduct/:productId", async (req, res) => {
+router.post("/:cartId/addProduct/:productId", authorize(['user']), async (req, res) => {
     try {
         const cartId = req.params.cartId;
         const productId = req.params.productId;
@@ -57,6 +62,7 @@ router.post("/:cartId/addProduct/:productId", async (req, res) => {
         res.status(500).json({ error: "Server internal error" });
     }
 });
+
 
 // Get cart by ID 
 router.get("/:cartId", async (req, res) => {
@@ -166,5 +172,60 @@ router.delete("/:cid", async (req, res) => {
         res.status(500).json({ error: "Server internal error" });
     }
 });
+
+// End purchase 
+router.post("/:cid/purchase", async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+        const cart = await Cart.findById(cartId).populate('products');
+
+        if (!cart) {
+            return res.status(404).json({ error: "Cart not found" });
+        }
+
+        let totalAmount = 0;
+        let insufficientStockProducts = [];
+
+        for (let item of cart.products) {
+            const product = await ProductModel.findById(item._id);
+            if (product.stock < item.quantity) {
+                insufficientStockProducts.push(item._id);
+            } else {
+                product.stock -= item.quantity;
+                await product.save();
+                totalAmount += product.price * item.quantity;
+            }
+        }
+
+        if (insufficientStockProducts.length > 0) {
+            return res.status(400).json({ 
+                error: "Some products have insufficient stock",
+                insufficientStockProducts 
+            });
+        }
+
+        const ticketData = {
+            amount: totalAmount,
+            purchaser: req.session.user.email
+        };
+
+        const ticket = await ticketService.createTicket(ticketData);
+
+        cart.products = cart.products.filter(item => 
+            insufficientStockProducts.includes(item._id)
+        );
+        await cart.save();
+
+        res.status(200).json({ 
+            status: "success", 
+            message: "Purchase completed successfully", 
+            ticket 
+        });
+    } catch (error) {
+        console.error("Error completing purchase:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 
 module.exports = router;

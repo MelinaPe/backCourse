@@ -112,6 +112,7 @@ async function loadProducts(page = 1) {
 async function addToCart(productId) {
   try {
       const cartId = "66336f188428ce2a6b2b1ae0";
+      console.log(`Adding product ${productId} to cart ${cartId}`);
       const response = await fetch(`/api/carts/${cartId}/addProduct/${productId}`, {
           method: "POST",
           headers: {
