@@ -60,15 +60,16 @@
 // TESTING DAO 
 //const { productDAO } = require('../services');
 const { productRepository } = require('../services')
+const logger = require('../utils/logger').logger; 
 
 class ProductManager {
     async addProduct(product) {
         try {
             const newProduct = await productRepository.addProduct(product);
-            console.log("Product added successfully");
+            logger.log("Product added successfully");
             return newProduct;
         } catch (error) {
-            console.error("Error adding product", error);
+            logger.error("Error adding product", error);
             throw error;
         }
     }
@@ -76,10 +77,10 @@ class ProductManager {
     async getProducts() {
         try {
             const products = await productRepository.getProducts();
-            console.log('Products retrieved:', products.length);
+            logger.info('Products retrieved:', products.length);
             return products;
         } catch (error) {
-            console.error("Error getting products", error);
+            logger.error("Error getting products", error);
             throw error;
         }
     }
@@ -88,7 +89,7 @@ class ProductManager {
         try {
             return await productRepository.getProductById(id);
         } catch (error) {
-            console.error("Error getting product by ID", error);
+            logger.error("Error getting product by ID", error);
             throw error;
         }
     }
@@ -96,10 +97,10 @@ class ProductManager {
     async updateProduct(id, updatedFields) {
         try {
             const updatedProduct = await productRepository.updateProduct(id, updatedFields);
-            console.log("Product updated successfully");
+            logger.info("Product updated successfully");
             return updatedProduct;
         } catch (error) {
-            console.error("Error updating product", error);
+            logger.error("Error updating product", error);
             throw error;
         }
     }
@@ -107,10 +108,10 @@ class ProductManager {
     async deleteProduct(id) {
         try {
             const deletedProduct = await productRepository.deleteProduct(id);
-            console.log("Product removed successfully");
+            logger.info("Product removed successfully");
             return deletedProduct;
         } catch (error) {
-            console.error("Error deleting product", error);
+            logger.error("Error deleting product", error);
             throw error;
         }
     }
@@ -119,7 +120,7 @@ class ProductManager {
         try {
             return await productRepository.countDocuments(filter);
         } catch (error) {
-            console.error("Error counting documents", error);
+            logger.error("Error counting documents", error);
             throw error;
         }
     }

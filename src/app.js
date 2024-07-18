@@ -20,11 +20,27 @@ const ProductManager = require("./controllers/productManager.js");
 // Import jsonwektoken, saved for later, I'm not using it right now.
 const jsonwebtoken = require("jsonwebtoken"); 
 const errorHandler = require('./middlewares/errorHandler.js');
+const addLogger = require('./utils/logger.js');
+
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("src/public"));
+app.use(addLogger); 
+
+// Routes for testing Logger 
+app.get("/loggerTest", (req, res) => {
+    req.logger.http("Message HTTP");
+    req.logger.info("Message INFO");
+    req.logger.warning("Message WARNING");
+    req.logger.error("Message ERROR");             
+
+    res.send("Logs"); 
+})
+
+
+
 
 app.use(session({
     secret: "secretLog", 

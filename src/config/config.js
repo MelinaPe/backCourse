@@ -10,6 +10,7 @@ dotenv.config({
 }); 
 
 const configObject = {
+    mode: mode,
     port: process.env.PORT, 
     mongo_url: process.env.MONGO_URL
 }
