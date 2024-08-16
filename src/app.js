@@ -17,10 +17,9 @@ const initializePassport = require("./config/passport.config.js");
 const authorize = require("./middlewares/authorization.js"); 
 const CartManager = require("./controllers/cartManager.js"); 
 const ProductManager = require("./controllers/productManager.js"); 
-// Import jsonwektoken, saved for later, I'm not using it right now.
 const jsonwebtoken = require("jsonwebtoken"); 
 const errorHandler = require('./middlewares/errorHandler.js');
-const addLogger = require('./utils/logger.js');
+const { addLogger } = require('./utils/logger.js');
 
 
 // Middleware
@@ -58,6 +57,9 @@ app.use(passport.initialize());
 app.use(passport.session()); 
 initializePassport(); 
 
+// Authorization middleware
+app.use("/api/products", authorize(['admin'])); 
+app.use("/api/carts/:cartId/addProduct/:productId", authorize(['user'])); 
 
 // Middleware authentication 
 function auth(req, res, next) {
@@ -66,6 +68,7 @@ function auth(req, res, next) {
     }
     return res.status(403).res.send("Authentication error. ");
 }
+
 
 // Express-Handlebars
 app.engine("handlebars", exphbs.engine());
@@ -98,9 +101,6 @@ app.use(cookieParser());
 // Error handling middleware
 app.use(errorHandler); 
 
-// Authorization middleware
-// app.use("/api/products", authorize(['admin'])); 
-// app.use("/api/carts/:cartId/addProduct/:productId", authorize(['user'])); 
 
 
 const httpServer = app.listen(port, () => {

@@ -37,31 +37,45 @@ router.get("/", async (req, res) => {
     }
 });
 
-// Add product to cart 
-router.post("/:cartId/addProduct/:productId", authorize(['user']), async (req, res) => {
+router.post("/:cartId/addProduct/:productId", authorize(['user', 'admin']), async (req, res) => {
     try {
         const cartId = req.params.cartId;
         const productId = req.params.productId;
 
-        const cart = await Cart.findById(cartId);
+        const cart = await Cart.findById(cartId).populate('products.product');
         if (!cart) {
             return res.status(404).json({ error: "Cart not found" });
         }
 
-        const product = await ProductModel.findOne({ _id: productId });
-        if (!product) {
-            return res.status(404).json({ error: "Product not found" });
+        const existingProduct = cart.products.find(item => item.product._id.toString() === productId);
+
+        if (existingProduct) {
+            existingProduct.quantity += 1;
+        } else {
+            const product = await ProductModel.findById(productId);
+            if (!product) {
+                return res.status(404).json({ error: "Product not found" });
+            }
+            cart.products.push({ product: product._id, quantity: 1 });
         }
 
-        cart.products.push(product._id);
         await cart.save();
 
-        res.status(200).json({ status: "success", data: cart });
+        const cartWithoutBuffer = {
+            ...cart.toObject(),
+            products: cart.products.map(item => ({
+                _id: item.product._id,
+                quantity: item.quantity
+            }))
+        };
+
+        res.status(200).json({ status: "success", data: cartWithoutBuffer });
     } catch (error) {
         console.error("Error adding product to cart:", error);
         res.status(500).json({ error: "Server internal error" });
     }
 });
+
 
 
 // Get cart by ID 

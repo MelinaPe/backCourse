@@ -61,6 +61,9 @@ const addLogger = (req, res, next) => {
     next(); 
 }
 
-module.exports = addLogger; 
+module.exports = {
+    logger,
+    addLogger
+};
 
 

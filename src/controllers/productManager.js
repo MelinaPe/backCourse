@@ -80,7 +80,7 @@ class ProductManager {
             logger.info('Products retrieved:', products.length);
             return products;
         } catch (error) {
-            logger.error("Error getting products", error);
+            console.log("Error getting products", error);
             throw error;
         }
     }
