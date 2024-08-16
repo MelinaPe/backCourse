@@ -20,6 +20,8 @@ const ProductManager = require("./controllers/productManager.js");
 const jsonwebtoken = require("jsonwebtoken"); 
 const errorHandler = require('./middlewares/errorHandler.js');
 const { addLogger } = require('./utils/logger.js');
+const swaggerJSDoc = require("swagger-jsdoc"); 
+const swaggerUiExpress = require("swagger-ui-express");
 
 
 // Middleware
@@ -37,8 +39,6 @@ app.get("/loggerTest", (req, res) => {
 
     res.send("Logs"); 
 })
-
-
 
 
 app.use(session({
@@ -69,6 +69,21 @@ function auth(req, res, next) {
     return res.status(403).res.send("Authentication error. ");
 }
 
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.1", 
+        info: {
+            title: "APP Beat Shop Documentation", 
+            description: "Where you will find your favourite beats"
+        }
+    }, 
+    apis: ["./src/docs/**/*.yaml"]
+}
+
+// Conectar swagger a nuestro servidor de express
+
+const specs = swaggerJSDoc(swaggerOptions); 
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs)); 
 
 // Express-Handlebars
 app.engine("handlebars", exphbs.engine());
@@ -106,26 +121,6 @@ app.use(errorHandler);
 const httpServer = app.listen(port, () => {
     console.log(`App in port: http://localhost:${port}`);
 });
-
-// const io = socket(httpServer);
-// const ProductManager = require("./controllers/productManager.js");
-
-
-// io.on("connection", async (socket) => {
-//     const productManager = new ProductManager();
-
-//     socket.emit("products", await productManager.getProducts());
-
-//     socket.on("removeProduct", async (id) => {
-//         await productManager.deleteProduct(id);
-//         socket.emit("products", await productManager.getProducts());
-//     });
-
-//     socket.on("addProduct", async (product) => {
-//         await productManager.addProduct(product);
-//         socket.emit("products", await productManager.getProducts());
-//     });
-
 
 
 const io = socket(httpServer);

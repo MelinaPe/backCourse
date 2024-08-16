@@ -4,37 +4,7 @@ const UserModel = require("../models/user.model");
 const { createHash } = require("../utils/hashbcrypt"); 
 const passport = require("passport"); 
 const initializePassport = require("../config/passport.config");  
-
-// route post to generate an user and save it in Mongodb
-
-// router.post("/", async (req, res) => {
-//     const {first_name, last_name, email, password, age} = req.body; 
-
-//     try {
-//         const userExists = await UserModel.findOne({email}); 
-//         if (userExists) {
-//             return res.status(400).send("The email is already registered"); 
-//         }
-//         const newUser = await UserModel.create({
-//             first_name, 
-//             last_name, 
-//             email, 
-//             password: createHash(password), 
-//             age
-//         }); 
-
-//         req.session.user = {
-//             email: newUser.email, 
-//             first_name: newUser.first_name
-//         }; 
-//         req.session.login = true; 
-
-//         res.status(200).send("User created successfully"); 
-//     } catch (error) {
-//         res.status(500).send("Error creating user"); 
-//         console.log(error); 
-//     }
-// })
+const authorize = require("../middlewares/authorization"); 
 
 // PASSPORT VERSION
 
@@ -62,6 +32,30 @@ router.get("/failedregister", async (req, res) => {
     res.send("Failed register"); 
 }); 
 
+router.get("/", async (req, res) => {
+    try {
+        const users = await UserModel.find({});
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.get("/:uid", async (req, res) => {
+    try {
+        const userId = req.params.uid;
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 
 module.exports = router; 
