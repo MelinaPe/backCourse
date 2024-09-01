@@ -2,7 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const socket = require("socket.io");
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 const productsRouter = require("./routes/product.router.js");
 const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
@@ -48,8 +48,12 @@ app.use(session({
     saveUninitialized: true, 
 
     // MongoStorage
+    // store: MongoStore.create({
+    //     mongoUrl: "mongodb+srv://entinfotografia:dejatedejoder1@cluster0.z5ighoj.mongodb.net/merliDataBase?retryWrites=true&w=majority&appName=Cluster0", ttl:100
+    // })
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://entinfotografia:dejatedejoder1@cluster0.z5ighoj.mongodb.net/merliDataBase?retryWrites=true&w=majority&appName=Cluster0", ttl:100
+        mongoUrl: process.env.MONGO_URL, 
+        ttl: 100
     })
 }))
 
@@ -100,15 +104,32 @@ app.set("views", "./src/views");
 
 
 // MongoDB Connection
+
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('MongoDB connected successfully');
+    } catch (error) {
+        console.error('MongoDB connection failed:', error);
+        process.exit(1); 
+    }
+};
+
 connectDB();
 
 app.get("/api/checkdbconnection", (req, res) => {
-    if (db.readyState === 1) { 
+    const dbState = mongoose.connection.readyState; 
+    if (dbState === 1) { 
         res.status(200).json({ message: "MongoDB connected successfully" });
     } else {
         res.status(500).json({ message: "MongoDB connection failed" });
     }
 });
+
+
 
 // Routes
 app.get("/", (req, res) => {
