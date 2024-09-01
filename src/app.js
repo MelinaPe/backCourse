@@ -105,29 +105,8 @@ app.set("views", "./src/views");
 
 // MongoDB Connection
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log('MongoDB connected successfully');
-    } catch (error) {
-        console.error('MongoDB connection failed:', error);
-        process.exit(1); 
-    }
-};
 
 connectDB();
-
-app.get("/api/checkdbconnection", (req, res) => {
-    const dbState = mongoose.connection.readyState; 
-    if (dbState === 1) { 
-        res.status(200).json({ message: "MongoDB connected successfully" });
-    } else {
-        res.status(500).json({ message: "MongoDB connection failed" });
-    }
-});
 
 
 
