@@ -24,6 +24,7 @@ const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUiExpress = require("swagger-ui-express");
 
 
+
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -58,7 +59,7 @@ app.use(passport.session());
 initializePassport(); 
 
 // Authorization middleware
-app.use("/api/products", authorize(['admin'])); 
+app.use("/api/products", productsRouter); 
 app.use("/api/carts/:cartId/addProduct/:productId", authorize(['user'])); 
 
 // Middleware authentication 
@@ -81,14 +82,22 @@ const swaggerOptions = {
 }
 
 // Conectar swagger a nuestro servidor de express
-
 const specs = swaggerJSDoc(swaggerOptions); 
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs)); 
 
-// Express-Handlebars
-app.engine("handlebars", exphbs.engine());
+
+//Handlebars prototype access 
+const hbs = exphbs.create({
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    }
+});
+
+app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
+
 
 // MongoDB Connection
 connectDB();
@@ -116,12 +125,9 @@ app.use(cookieParser());
 // Error handling middleware
 app.use(errorHandler); 
 
-
-
 const httpServer = app.listen(port, () => {
     console.log(`App in port: http://localhost:${port}`);
 });
-
 
 const io = socket(httpServer);
 const productManager = new ProductManager();

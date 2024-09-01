@@ -1,5 +1,6 @@
 const authorize = (roles) => {
     return (req, res, next) => {
+        console.log("User session in authorize middleware:", req.session.user);
         if (req.session.user && roles.includes(req.session.user.role)) {
             return next();
         }
@@ -8,3 +9,5 @@ const authorize = (roles) => {
 };
 
 module.exports = authorize;
+
+

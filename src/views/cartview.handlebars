@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+<body>
+    <h1>Your Shopping Cart</h1>
+    <input type="hidden" id="cartId" value="{{cartId}}">
+
+    <div class="cart-container">
+        <ul>
+            {{#each cartData.products}}
+                <li>
+                    <strong>{{this.product.title}}</strong> - 
+                    €<span id="price-{{this._id}}">{{this.product.price}}</span> - 
+                    Quantity: <span id="quantity-{{this._id}}">{{this.quantity}}</span>
+                    <br>
+                    <button onclick="updateQuantity('{{this._id}}', 'decrease')">-</button>
+                    <button onclick="updateQuantity('{{this._id}}', 'increase')">+</button>
+                    <button onclick="removeProduct('{{this._id}}')">Remove</button>
+                </li>
+            {{/each}}
+        </ul>
+        <h3>Total: €<span id="cart-total">{{total}}</span></h3>
+    </div>
+    <div class="cart-actions">
+        <button onclick="clearCart()">Clear Cart</button>
+        <button onclick="completePurchase()">Complete Purchase</button>
+    </div>
+<script src="/socket.io/socket.io.js"></script>    
+<script src="/js/main.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        updateTotal();
+    });
+</script>
+</body>
+</html>

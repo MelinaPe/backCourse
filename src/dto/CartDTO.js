@@ -1,7 +1,7 @@
 class CartDTO {
-    constructor({ id, cartId, products, createdAt }) {
-        this.id = id;
-        this.cartId = cartId;
+    constructor({ _id, cartId, products, createdAt }) {
+        this._id = _id; 
+        this.cartId = cartId || _id;
         this.products = products;
         this.createdAt = createdAt;
     }

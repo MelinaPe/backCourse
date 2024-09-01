@@ -10,6 +10,7 @@ const CartManager = require("../controllers/cartManager.js");
 const cartManager = new CartManager(); 
 const TicketService = require("../services/ticketService.js"); 
 const ticketService = new TicketService(); 
+const emailService = require("../services/emailService.js")
 
 // Post cart 
 router.post("/", async (req, res) => {
@@ -41,6 +42,11 @@ router.post("/:cartId/addProduct/:productId", authorize(['user', 'admin']), asyn
     try {
         const cartId = req.params.cartId;
         const productId = req.params.productId;
+
+        if (!productId) {
+            return res.status(400).json({ error: "Product ID is missing or invalid" });
+        }
+        
 
         const cart = await Cart.findById(cartId).populate('products.product');
         if (!cart) {
@@ -83,11 +89,14 @@ router.get("/:cartId", async (req, res) => {
     try {
         const cartId = req.params.cartId;
 
-        const cart = await Cart.findById(cartId).populate('products');
+        const cart = await Cart.findById(cartId).populate('products.product');
 
         if (!cart) {
             return res.status(404).json({ error: "Cart not found" });
         }
+        cart.products = cart.products.filter(item => item.product !== null);
+        await cart.save();
+        
         res.status(200).json({ status: "success", data: cart });
     } catch (error) {
         console.error("Error getting cart by ID:", error);
@@ -100,24 +109,28 @@ router.delete("/:cid/products/:pid", async (req, res) => {
     try {
         const cartId = req.params.cid;
         const productId = req.params.pid;
-        const cart = await Cart.findById(cartId);
 
+        const cart = await Cart.findById(cartId).populate('products.product');
         if (!cart) {
             return res.status(404).json({ error: "Cart not found" });
         }
-        const index = cart.products.indexOf(productId);
 
-        if (index === -1) {
+        const productIndex = cart.products.findIndex(prod => prod._id.toString() === productId);
+        if (productIndex === -1) {
             return res.status(404).json({ error: "Product not found in cart" });
         }
-        cart.products.splice(index, 1);
+
+        cart.products.splice(productIndex, 1); 
         await cart.save();
+
         res.status(200).json({ status: "success", data: cart });
     } catch (error) {
         console.error("Error removing product from cart:", error);
-        res.status(500).json({ error: "Server internal error" });
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
 
 // Update cart with array of products
 router.put("/:cid", async (req, res) => {
@@ -147,7 +160,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
         const productId = req.params.pid;
         const { quantity } = req.body;
 
-        const cart = await Cart.findById(cartId);
+        const cart = await Cart.findById(cartId).populate('products.product');
         if (!cart) {
             return res.status(404).json({ error: "Cart not found" });
         }
@@ -166,6 +179,10 @@ router.put("/:cid/products/:pid", async (req, res) => {
         res.status(500).json({ error: "Server internal error" });
     }
 });
+
+
+
+
 
 // Delete all products from cart 
 router.delete("/:cid", async (req, res) => {
@@ -187,6 +204,8 @@ router.delete("/:cid", async (req, res) => {
     }
 });
 
+
+
 // End purchase 
 router.post("/:cid/purchase", async (req, res) => {
     try {
@@ -201,7 +220,12 @@ router.post("/:cid/purchase", async (req, res) => {
         let insufficientStockProducts = [];
 
         for (let item of cart.products) {
-            const product = await ProductModel.findById(item._id);
+            const product = await ProductModel.findById(item.product._id);
+
+            if (!product) {
+                return res.status(404).json({ error: `Product with ID ${item.product._id} not found` });
+            }
+
             if (product.stock < item.quantity) {
                 insufficientStockProducts.push(item._id);
             } else {
@@ -218,6 +242,11 @@ router.post("/:cid/purchase", async (req, res) => {
             });
         }
 
+        const user = req.session.user;
+        if (!user) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
         const ticketData = {
             amount: totalAmount,
             purchaser: req.session.user.email
@@ -229,6 +258,12 @@ router.post("/:cid/purchase", async (req, res) => {
             insufficientStockProducts.includes(item._id)
         );
         await cart.save();
+
+        await emailService.sendEmail(
+            user.email,
+            'Purchase Confirmation',
+            `Thank you for your purchase! Your ticket code is ${ticket._id}. Total amount: €${totalAmount}`
+        );
 
         res.status(200).json({ 
             status: "success", 
@@ -243,3 +278,4 @@ router.post("/:cid/purchase", async (req, res) => {
 
 
 module.exports = router;
+

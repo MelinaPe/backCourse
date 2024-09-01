@@ -25,8 +25,6 @@ const levels = {
 winston.addColors(levels.colors); 
 
 
-// Logger development
-
 const loggerDev = winston.createLogger({
     levels: levels.levels, 
     transports: [
@@ -36,7 +34,6 @@ const loggerDev = winston.createLogger({
     ]
 })
 
-// Logger production 
 
 const loggerPro = winston.createLogger({
     levels: levels.levels, 
@@ -53,7 +50,6 @@ const loggerPro = winston.createLogger({
 const logger = config.mode === "production" ? loggerPro : loggerDev; 
 
 
-// Create middleware to export in app.js
 
 const addLogger = (req, res, next) => {
     req.logger = logger; 

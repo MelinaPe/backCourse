@@ -1,32 +1,3 @@
-// const IProductDAO = require('./IProductDAO');
-// const ProductModel = require('../models/products');
-
-// class MongooseProductDAO extends IProductDAO {
-//     async addProduct(product) {
-//         const newProduct = new ProductModel(product);
-//         await newProduct.save();
-//         return newProduct;
-//     }
-
-//     async getProducts() {
-//         return await ProductModel.find();
-//     }
-
-//     async getProductById(id) {
-//         return await ProductModel.findById(id);
-//     }
-
-//     async updateProduct(id, updatedFields) {
-//         return await ProductModel.findByIdAndUpdate(id, updatedFields, { new: true });
-//     }
-
-//     async deleteProduct(id) {
-//         return await ProductModel.findByIdAndDelete(id);
-//     }
-// }
-
-// module.exports = MongooseProductDAO;
-
 
 const IProductDAO = require('./IProductDAO');
 const ProductModel = require('../models/products');

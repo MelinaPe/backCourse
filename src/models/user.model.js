@@ -27,6 +27,23 @@ const schema = new mongoose.Schema({
         type: String,
         enum: ['user', 'admin'],
         default: 'user' 
+    }, 
+    cartId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cart',
+        default: null 
+    },
+    lastConnection: {
+        type: Date, 
+        default: Date.now  
+    },
+    resetPasswordToken: {
+        type: String,
+        default: null 
+    },
+    resetPasswordExpires: {
+        type: Date,
+        default: null 
     }
 })
 
